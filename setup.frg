@@ -1,4 +1,4 @@
-#lang forge/froglet
+#lang forge
 
 abstract sig Boolean {}
 one sig True, False extends Boolean {}
@@ -20,85 +20,36 @@ sig State {
   nextp: lone Piece
 }
 
-fun mirror[col: Int]: Int {
-    subtract[3, col]
-}
-
 // Shape 1 Start
-
-pred isShape1[s: State]{
-    all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff (y = 0 and (x = 0 or x = 1 or x = 2))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
-    }
+pred isShape1[s: State] {
+    all x, y: Int | s.board[x][y] = True iff (y = 0 and (x = 0 or x = 1 or x = 2))
 }
 
-pred isShape1Mirror[s: State]{
-    all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff (y = 0 and (x = 3 or x = 2 or x = 1))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
-    }
+pred isShape1Mirror[s: State] {
+    all x, y: Int | s.board[x][y] = True iff (y = 0 and (x = 3 or x = 2 or x = 1))
 }
 // Shape 1 End
 
 // Shape 2 Start
-pred isShape2[s: State]{
-    all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff (x = 0 and (y = 0 or y = 1 or y = 2))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
-    }
+pred isShape2[s: State] {
+    all x, y: Int | s.board[x][y] = True iff (x = 0 and (y = 0 or y = 1 or y = 2))
 }
 
 pred isShape2Mirror[s: State]{
-    all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff (x = 3 and (y = 0 or y = 1 or y = 2))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
-    }
+    all x, y: Int | s.board[x][y] = True iff (x = 3 and (y = 0 or y = 1 or y = 2))
 }
 // Shape 2 End
 
 // Shape 3 Start
 pred isShape3[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 0 and y = 0) or (x = 1 and y = 0) or (x = 3 and y = 0))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 0 and y = 0) or (x = 1 and y = 0) or (x = 3 and y = 0))
     }
 }
 
 pred isShape3Mirror[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 3 and y = 0) or (x = 2 and y = 0) or (x = 0 and y = 0))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 3 and y = 0) or (x = 2 and y = 0) or (x = 0 and y = 0))
     }
 }
 // Shape 3 End
@@ -106,25 +57,13 @@ pred isShape3Mirror[s: State]{
 // Shape 4 Start
 pred isShape4[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 0 and y = 0) or (x = 1 and y = 1) or (x = 3 and y = 0))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 0 and y = 0) or (x = 1 and y = 1) or (x = 3 and y = 0))
     }
 }
 
 pred isShape4Mirror[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 3 and y = 0) or (x = 2 and y = 1) or (x = 0 and y = 0))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 3 and y = 0) or (x = 2 and y = 1) or (x = 0 and y = 0))
     }
 }
 // Shape 4 End
@@ -132,25 +71,13 @@ pred isShape4Mirror[s: State]{
 // Shape 5 Start
 pred isShape5[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 0 and y = 0) or (x = 0 and y = 1) or (x = 1 and y = 0))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 0 and y = 0) or (x = 0 and y = 1) or (x = 1 and y = 0))
     }
 }
 
 pred isShape5Mirror[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 3 and y = 0) or (x = 3 and y = 1) or (x = 2 and y = 0))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 3 and y = 0) or (x = 3 and y = 1) or (x = 2 and y = 0))
     }
 }
 // Shape 5 End
@@ -158,25 +85,13 @@ pred isShape5Mirror[s: State]{
 // Shape 6 Start
 pred isShape6[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 1 and y = 1) or (x = 0 and y = 1) or (x = 1 and y = 0))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 1 and y = 1) or (x = 0 and y = 1) or (x = 1 and y = 0))
     }
 }
 
 pred isShape6Mirror[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 2 and y = 1) or (x = 3 and y = 1) or (x = 2 and y = 0))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 2 and y = 1) or (x = 3 and y = 1) or (x = 2 and y = 0))
     }
 }
 // Shape 6 End
@@ -184,25 +99,13 @@ pred isShape6Mirror[s: State]{
 // Shape 7 Start
 pred isShape7[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 0 and y = 0) or (x = 0 and y = 1) or (x = 2 and y = 0))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 0 and y = 0) or (x = 0 and y = 1) or (x = 2 and y = 0))
     }
 }
 
 pred isShape7Mirror[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 3 and y = 0) or (x = 3 and y = 1) or (x = 1 and y = 0))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 3 and y = 0) or (x = 3 and y = 1) or (x = 1 and y = 0))
     }
 }
 // Shape 7 End
@@ -210,25 +113,13 @@ pred isShape7Mirror[s: State]{
 // Shape 8 Start
 pred isShape8[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 0 and y = 0) or (x = 1 and y = 0) or (x = 1 and y = 3))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 0 and y = 0) or (x = 1 and y = 0) or (x = 1 and y = 3))
     }
 }
 
 pred isShape8Mirror[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 3 and y = 0) or (x = 2 and y = 0) or (x = 2 and y = 3))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 3 and y = 0) or (x = 2 and y = 0) or (x = 2 and y = 3))
     }
 }
 // Shape 8 End
@@ -236,25 +127,13 @@ pred isShape8Mirror[s: State]{
 // Shape 9 Start
 pred isShape9[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 0 and y = 0) or (x = 0 and y = 1) or (x = 1 and y = 1))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 0 and y = 0) or (x = 0 and y = 1) or (x = 1 and y = 1))
     }
 }
 
 pred isShape9Mirror[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 3 and y = 0) or (x = 3 and y = 1) or (x = 2 and y = 1))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 3 and y = 0) or (x = 3 and y = 1) or (x = 2 and y = 1))
     }
 }
 // Shape 9 End
@@ -262,25 +141,13 @@ pred isShape9Mirror[s: State]{
 // Shape 10 Start
 pred isShape10[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 0 and y = 0) or (x = 1 and y = 0) or (x = 1 and y = 1))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 0 and y = 0) or (x = 1 and y = 0) or (x = 1 and y = 1))
     }
 }
 
 pred isShape10Mirror[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 3 and y = 0) or (x = 2 and y = 0) or (x = 2 and y = 1))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 3 and y = 0) or (x = 2 and y = 0) or (x = 2 and y = 1))
     }
 }
 // Shape 10 End
@@ -288,25 +155,13 @@ pred isShape10Mirror[s: State]{
 // Shape 11 Start
 pred isShape11[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 0 and y = 0) or (x = 0 and y = 1) or (x = 3 and y = 0))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 0 and y = 0) or (x = 0 and y = 1) or (x = 3 and y = 0))
     }
 }
 
 pred isShape11Mirror[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 3 and y = 0) or (x = 3 and y = 1) or (x = 0 and y = 0))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 3 and y = 0) or (x = 3 and y = 1) or (x = 0 and y = 0))
     }
 }
 // Shape 11 End
@@ -314,25 +169,13 @@ pred isShape11Mirror[s: State]{
 // Shape 12 Start
 pred isShape12[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 1 and y = 0) or (x = 2 and y = 0) or (x = 3 and y = 1))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 1 and y = 0) or (x = 2 and y = 0) or (x = 3 and y = 1))
     }
 }
 
 pred isShape12Mirror[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 2 and y = 0) or (x = 1 and y = 0) or (x = 0 and y = 1))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 2 and y = 0) or (x = 1 and y = 0) or (x = 0 and y = 1))
     }
 }
 // Shape 12 End
@@ -340,25 +183,13 @@ pred isShape12Mirror[s: State]{
 // Shape 13 Start
 pred isShape13[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 0 and y = 0) or (x = 2 and y = 0) or (x = 3 and y = 1))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 0 and y = 0) or (x = 2 and y = 0) or (x = 3 and y = 1))
     }
 }
 
 pred isShape13Mirror[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 3 and y = 0) or (x = 1 and y = 0) or (x = 0 and y = 1))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 3 and y = 0) or (x = 1 and y = 0) or (x = 0 and y = 1))
     }
 }
 // Shape 13 End
@@ -366,30 +197,18 @@ pred isShape13Mirror[s: State]{
 // Shape 14 Start
 pred isShape14[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 0 and y = 0) or (x = 1 and y = 1) or (x = 2 and y = 1))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 0 and y = 0) or (x = 1 and y = 1) or (x = 2 and y = 1))
     }
 }
 
 pred isShape14Mirror[s: State]{
     all x, y: Int | {
-        (0 <= x and x <= 3 and 0 <= y and y <= 2) implies {
-            some s.board[x][y]
-            s.board[x][y] = True iff ((x = 3 and y = 0) or (x = 2 and y = 1) or (x = 1 and y = 1))
-        }
-        (not (0 <= x and x <= 3 and 0 <= y and y <= 2)) implies {
-            no s.board[x][y]
-        }
+        s.board[x][y] = True iff ((x = 3 and y = 0) or (x = 2 and y = 1) or (x = 1 and y = 1))
     }
 }
 // Shape 14 End
 
-
+// empty space for O
 pred o_hole[x, y: Int, s: State] {
   s.nextp = O
   s.board[x,y] = False
@@ -398,6 +217,7 @@ pred o_hole[x, y: Int, s: State] {
   s.board[add[x,1],add[y,1]] = False
 }
 
+// empty space for vertical I
 pred i_vert_hole[x: Int, s: State] {
   s.nextp = I_v
   s.board[x,0] = False
@@ -405,6 +225,7 @@ pred i_vert_hole[x: Int, s: State] {
   s.board[x,2] = False
 }
 
+// empty space for horizontal I
 pred i_horz_hole[y: Int, s: State] {
   s.nextp = I_h
   s.board[0,y] = False
@@ -413,6 +234,7 @@ pred i_horz_hole[y: Int, s: State] {
   s.board[3,y] = False
 }
 
+// empty space for S down
 pred s_down_hole[x, y: Int, s: State] {
   s.nextp = S_d
   s.board[x,y] = False
@@ -421,6 +243,7 @@ pred s_down_hole[x, y: Int, s: State] {
   s.board[add[x,2],add[y,1]] = False
 }
 
+// empty space for S up
 pred s_up_hole[x, y: Int, s: State] {
   s.nextp = S_u
   s.board[x,y] = False
@@ -429,6 +252,7 @@ pred s_up_hole[x, y: Int, s: State] {
   s.board[subtract[x,1],add[y,2]] = False
 }
 
+// empty space for Z down
 pred z_down_hole[x, y: Int, s: State] {
   s.nextp = Z_d
   s.board[x,y] = False
@@ -437,6 +261,7 @@ pred z_down_hole[x, y: Int, s: State] {
   s.board[add[x,2],subtract[y,1]] = False
 }
 
+// empty space for Z up
 pred z_up_hole[x, y: Int, s: State] {
   s.nextp = Z_u
   s.board[x,y] = False
@@ -445,6 +270,7 @@ pred z_up_hole[x, y: Int, s: State] {
   s.board[add[x,1],add[y,2]] = False
 }
 
+// empty space for L_1
 pred l1_hole[x, y: Int, s: State] {
   s.nextp = L_1
   s.board[x,y] = False
@@ -453,6 +279,7 @@ pred l1_hole[x, y: Int, s: State] {
   s.board[add[x,2],add[y,1]] = False
 }
 
+// empty space for L_2
 pred l2_hole[x, y: Int, s: State] {
   s.nextp = L_2
   s.board[x,y] = False
@@ -461,6 +288,7 @@ pred l2_hole[x, y: Int, s: State] {
   s.board[x,add[y,2]] = False
 }
 
+// empty space for L_3
 pred l3_hole[x, y: Int, s: State] {
   s.nextp = L_3
   s.board[x,y] = False
@@ -469,6 +297,7 @@ pred l3_hole[x, y: Int, s: State] {
   s.board[add[x,2],add[y,1]] = False
 }
 
+// empty space for L_4
 pred l4_hole[x, y: Int, s: State] {
   s.nextp = L_4
   s.board[x,y] = False
@@ -477,6 +306,7 @@ pred l4_hole[x, y: Int, s: State] {
   s.board[subtract[x,1],add[y,2]] = False
 }
 
+// empty space for J_1
 pred j1_hole[x, y: Int, s: State] {
   s.nextp = J_1
   s.board[x,y] = False
@@ -485,6 +315,7 @@ pred j1_hole[x, y: Int, s: State] {
   s.board[add[x,2],y] = False
 }
 
+// empty space for J_2
 pred j2_hole[x, y: Int, s: State] {
   s.nextp = J_2
   s.board[x,y] = False
@@ -493,6 +324,7 @@ pred j2_hole[x, y: Int, s: State] {
   s.board[add[x,1],add[y,2]] = False
 }
 
+// empty space for J_3
 pred j3_hole[x, y: Int, s: State] {
   s.nextp = J_3
   s.board[x,y] = False
@@ -501,6 +333,7 @@ pred j3_hole[x, y: Int, s: State] {
   s.board[add[x,2],subtract[y,1]] = False
 }
 
+// empty space for J_4
 pred j4_hole[x, y: Int, s: State] {
   s.nextp = J_4
   s.board[x,y] = False
@@ -509,6 +342,7 @@ pred j4_hole[x, y: Int, s: State] {
   s.board[add[x,1],add[y,2]] = False
 }
 
+// empty space for T_1
 pred t1_hole[x, y: Int, s: State] {
   s.nextp = T_1
   s.board[x,y] = False
@@ -517,6 +351,7 @@ pred t1_hole[x, y: Int, s: State] {
   s.board[add[x,1],add[y,1]] = False
 }
 
+// empty space for T_2
 pred t2_hole[x, y: Int, s: State] {
   s.nextp = T_2
   s.board[x,y] = False
@@ -525,6 +360,7 @@ pred t2_hole[x, y: Int, s: State] {
   s.board[x,add[y,2]] = False
 }
 
+// empty space for T_3
 pred t3_hole[x, y: Int, s: State] {
   s.nextp = T_3
   s.board[x,y] = False
@@ -533,6 +369,7 @@ pred t3_hole[x, y: Int, s: State] {
   s.board[subtract[x,1],add[y,1]] = False
 }
 
+// empty space for T_4
 pred t4_hole[x, y: Int, s: State] {
   s.nextp = T_4
   s.board[x,y] = False
@@ -541,8 +378,7 @@ pred t4_hole[x, y: Int, s: State] {
   s.board[x,add[y,2]] = False
 }
 
-
-
+// checking if there is a full line
 pred line_clear[x,y: Int, s: State] {
     s.board[0,y] = True
     s.board[1,y] = True
