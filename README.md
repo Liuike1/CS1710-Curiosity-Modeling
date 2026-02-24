@@ -1,4 +1,4 @@
-Curiosity Modeling - Tetris 4W 
+# Curiosity Modeling - Tetris 4W 
 
 # Project Objective
 
