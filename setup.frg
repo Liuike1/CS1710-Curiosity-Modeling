@@ -4,9 +4,9 @@ abstract sig Boolean {}
 one sig True, False extends Boolean {}
 
 abstract sig Piece {}
+one sig O extends Piece {}
 abstract sig T, I, L, J, S, Z extends Piece {}
 
-one sig O extends Piece {}
 one sig T_1, T_2, T_3, T_4 extends T {}
 one sig I_v, I_h extends I {}
 one sig L_1, L_2, L_3, L_4 extends L {}
@@ -208,13 +208,42 @@ pred isShape14Mirror[s: State]{
 }
 // Shape 14 End
 
+// get the coordinates of each piece
+fun piece_coords[x: Int, y: Int, p: Piece]: set (Int -> Int) {
+    p = O => ({x -> y} + {add[x,1] -> y} + {x -> add[y,1]} + {add[x,1] -> add[y,1]}) else
+
+    p = I_v => ({x -> y} + {x -> add[y,1]} + {x -> add[y,2]} + {x -> add[y,3]}) else
+    p = I_h => ({x -> y} + {add[x,1] -> y} + {add[x,2] -> y} + {add[x,3] -> y}) else
+
+    p = S_d => ({x -> y} + {add[x,1] -> y} + {add[x,1] -> add[y,1]} + {add[x,2] -> add[y,1]}) else
+    p = S_u => ({x -> y} + {x -> add[y,1]} + {subtract[x,1] -> add[y,1]} + {subtract[x,1] -> add[y,2]}) else
+    
+    p = Z_d => ({x -> y} + {add[x,1] -> y} + {add[x,1] -> subtract[y,1]} + {add[x,2] -> subtract[y,1]}) else
+    p = Z_u => ({x -> y} + {x -> add[y,1]} + {add[x,1] -> add[y,1]} + {add[x,1] -> add[y,2]}) else
+
+    p = L_1 => ({x -> y} + {add[x,1] -> y} + {add[x,2] -> y} + {add[x,2] -> add[y,1]}) else
+    p = L_2 => ({x -> y} + {add[x,1] -> y} + {x -> add[y,1]} + {x -> add[y,2]}) else
+    p = L_3 => ({x -> y} + {x -> add[y,1]} + {add[x,1] -> add[y,1]} + {add[x,2] -> add[y,1]}) else
+    p = L_4 => ({x -> y} + {x -> add[y,1]} + {x -> add[y,2]} + {subtract[x,1] -> add[y,2]}) else
+    
+    p = J_1 => ({x -> y} + {x -> add[y,1]} + {add[x,1] -> y} + {add[x,2] -> y}) else
+    p = J_2 => ({x -> y} + {x -> add[y,1]} + {x -> add[y,2]} + {add[x,1] -> add[y,2]}) else
+    p = J_3 => ({x -> y} + {add[x,1] -> y} + {add[x,2] -> y} + {add[x,2] -> subtract[y,1]}) else
+    p = J_4 => ({x -> y} + {add[x,1] -> y} + {add[x,1] -> add[y,1]} + {add[x,1] -> add[y,2]}) else
+    
+    p = T_1 => ({x -> y} + {add[x,1] -> y} + {add[x,2] -> y} + {add[x,1] -> add[y,1]}) else
+    p = T_2 => ({x -> y} + {x -> add[y,1]} + {add[x,1] -> add[y,1]} + {x -> add[y,2]}) else
+    p = T_3 => ({x -> y} + {x -> add[y,1]} + {add[x,1] -> add[y,1]} + {subtract[x,1] -> add[y,1]}) else
+    ({x -> y} + {x -> add[y,1]} + {subtract[x,1] -> add[y,1]} + {x -> add[y,2]}) 
+}
+
 // empty space for O
 pred o_hole[x, y: Int, s: State] {
-  s.nextp = O
-  s.board[x,y] = False
-  s.board[add[x,1],y] = False
-  s.board[x,add[y,1]] = False
-  s.board[add[x,1],add[y,1]] = False
+    s.nextp = O
+    s.board[x,y] = False
+    s.board[add[x,1],y] = False
+    s.board[x,add[y,1]] = False
+    s.board[add[x,1],add[y,1]] = False
 }
 
 // empty space for vertical I
@@ -337,7 +366,7 @@ pred j3_hole[x, y: Int, s: State] {
 pred j4_hole[x, y: Int, s: State] {
   s.nextp = J_4
   s.board[x,y] = False
-  s.board[add[x,1],y]
+  s.board[add[x,1],y] = False
   s.board[add[x,1],add[y,1]] = False
   s.board[add[x,1],add[y,2]] = False
 }
@@ -379,15 +408,17 @@ pred t4_hole[x, y: Int, s: State] {
 }
 
 // checking if there is a full line
-pred line_clear[x,y: Int, s: State] {
+pred line_clear[y: Int, s: State] {
     s.board[0,y] = True
     s.board[1,y] = True
     s.board[2,y] = True
     s.board[3,y] = True
 }
 
-test1: run {some s1, s2: State | {
+test1: run {
+    some s1, s2: State | {
         s1 != s2
         isShape14[s1]
         isShape14Mirror[s2]
-    }} for exactly 2 State
+    }
+} for exactly 2 State

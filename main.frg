@@ -2,28 +2,29 @@
 
 open "setup.frg"
 
-pred wellformed_state[s: State] {
-  some s.nextp
-  // some s.nexts
-  all x, y: Int | {
-    (0 <= x and x <= 3 and 0 <= y and y <= 2) implies some s.board[x,y] else no s.board[x,y]
-  }
-  (isShape1[s] or isShape1Mirror[s] or isShape2[s] or isShape2Mirror[s] 
+pred wellformed_states {
+  // all board states are continuable
+  all s: State | {
+    all x, y: Int | {
+      (0 <= x and x <= 3 and 0 <= y and y <= 2) implies some s.board[x,y] else no s.board[x,y]
+    }
+    isShape1[s] or isShape1Mirror[s] or isShape2[s] or isShape2Mirror[s] 
     or isShape3[s] or isShape3Mirror[s] or isShape4[s] or isShape4Mirror[s] 
     or isShape5[s] or isShape5Mirror[s] or isShape6[s] or isShape6Mirror[s] 
     or isShape7[s] or isShape7Mirror[s] or isShape8[s] or isShape8Mirror[s] 
     or isShape9[s] or isShape9Mirror[s] or isShape10[s] or isShape10Mirror[s] 
     or isShape11[s] or isShape11Mirror[s] or isShape12[s] or isShape12Mirror[s] 
-    or isShape13[s] or isShape13Mirror[s] or isShape14[s] or isShape14Mirror[s])
-}
-
-test2: run {
-  some s1, s2: State | {
-    s1 != s2
-    wellformed_state[s1]
-    wellformed_state[s2]
+    or isShape13[s] or isShape13Mirror[s] or isShape14[s] or isShape14Mirror[s]
   }
-} for exactly 2 State
+
+  // only one board state is allowed to not have the next fields (i.e. it's the terminal state)
+  one s: State | (no s.nexts and no s.nextp)
+
+  // all other board states must have all fields
+  all s: State | (some s.nexts or some s.nextp) implies {
+    some s.nexts and some s.nextp
+  }
+}
 
 // checking that there is somewhere to put the next piece
 pred next_piece_hole[x, y: Int, s: State] {
@@ -44,8 +45,8 @@ pred next_piece_hole[x, y: Int, s: State] {
   s.nextp = J_3 implies j3_hole[x,y,s]
   s.nextp = J_4 implies j4_hole[x,y,s]
 
-  s.nextp = I_v implies i_vert_hole[x,y,s]
-  s.nextp = I_h implies i_horz_hole[x,y,s]
+  s.nextp = I_v implies i_vert_hole[x,s]
+  s.nextp = I_h implies i_horz_hole[y,s]
 
   s.nextp = S_d implies s_down_hole[x,y,s]
   s.nextp = S_u implies s_up_hole[x,y,s]
@@ -54,29 +55,70 @@ pred next_piece_hole[x, y: Int, s: State] {
   s.nextp = Z_u implies z_up_hole[x,y,s]
 }
 
-// fun line_clear[x, y: Int, s: State]: Int -> Int {
-//   next_piece_hole[x,y,s]
-// }
-
 // pred transition_clear[pre: State, post: State] {
 //   some disj x, y: Int | {
-//     next_piece_hole[x,y,pre]
+//     all s, t: Int | (s -> t) in next_coords[x,y,s.nextp] => {
+//       pre.board[s,t] = False
+//       post.board[s,t] = True
+//     }
+//   }
+//   some y: Int | {
+//     line_clear[y, pre]
+//     post.board[0,y] = pre.board[0,add[y,1]]
+//     post.board[1,y] = pre.board[1,add[y,1]]
+//     post.board[2,y] = pre.board[2,add[y,1]]
+//     post.board[3,y] = pre.board[3,add[y,1]]
 //   }
 // }
-/**
-some y: Int | line_clear[y, pre] implies {
-      post.board[0,y] = pre.board[0,add[y,1]]
-    post.board[1,y] = pre.board[1,add[y,1]]
-    post.board[2,y] = pre.board[2,add[y,1]]
-    post.board[3,y] = pre.board[3,add[y,1]]
+
+// Transition predicate: validates a valid piece placement and line clear
+pred transition_clear[pre: State, post: State] {
+  pre.nexts = post
+  
+  // find the coordinate to place the piece
+  some x, y: Int | {
+    next_piece_hole[x, y, pre]
+    
+    // find row that is cleared
+    some clear_y: Int | {
+      (clear_y >= 0 and clear_y <= 2)
+      
+      all check_x: Int | {
+        (check_x >= 0 and check_x <= 3) implies {
+          // Cell is True if it was True in pre OR piece occupies it
+          pre.board[check_x,clear_y] = True or {
+            some s: Int | (check_x -> clear_y) in piece_coords[s, clear_y, pre.nextp]
+          }
+        }
+      }
+      
+      // check board below the cleared line stays the same, and board above moves down 1
+      all x2, y2: Int | {
+        (x2 >= 0 and x2 <= 3 and y2 >= 0 and y2 <= 2) implies {
+          (y2 < clear_y) implies {
+            // stays the same plus any possible mino from the new piece
+            (some s: Int | (x2 -> y2) in piece_coords[s, y2, pre.nextp]) implies {
+              post.board[x2,y2] = True
+            } else post.board[x2,y2] = pre.board[x2,y2] 
+          }
+          (y2 >= clear_y) implies {
+            (y2 < 2) implies {
+              // moves down one plus any possible mino from new piece
+              (some s: Int | (x2 -> add[clear_y,1]) in piece_coords[s, add[clear_y,1], pre.nextp]) implies {
+                post.board[x2,y2] = True
+              } else post.board[x2,y2] = pre.board[x2,add[clear_y,1]]
+            }
+          }
+        }
+      }
     }
-*/
+  }
+}
 
 pred wellformed_game {
-  all s: State | {
-    wellformed_state[s]
-   // some t: State | t = s.nexts implies transition_clear[s,t]
-   // not reachable[s, s, nexts]
+  wellformed_states
+  all s: State | some s.nexts implies {
+    transition_clear[s, s.nexts]
   }
 }
 
