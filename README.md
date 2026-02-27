@@ -14,7 +14,7 @@ Since the "use case" is to check given a piece sequence and start state, whether
 
 # Visualization
 
-TBD
+Proudly authored by Codex 5.3. The visualization shows the state transitions and next pieces in a more human-readable format.
 
 # Signature and Predicates
 
@@ -34,20 +34,32 @@ We used the same True/False signatures used in other projects.
 
 We wrote predicates for each of the 28 continuable states, checking if a given state matches that exact configuration of minos. 
 
+## Pieces Pred
+
+We wrote predicates to check whether there is a valid hole on the board for each of the pieces to fit in. 
+
+## Piece_coord function:
+
+Function to return the coordinates of a piece given its starting coordinate.
+
 ## Wellformed Pred
 
-The well formed predicate checks that each coordinate in a state is mapped to exactly one of True/False. It also checks that only one state can not have a next state and next piece, which acts as the last state. 
+The well formed predicate checks that each coordinate in a state is mapped to exactly one of True/False. It also checks that the board state transitions are linear, and that there is exactly one start and end state (i.e. no end state). 
 
 Since we only care about the continuable states, we also check that all states satisfy one of the 28 state predicates
 
 ## Transition Pred
 
-TBD
+Transition checks that the current state and its next state are connected by a line clear, and the minos are the board are the correct ones from the previous state. 
 
 # Testing
 
-TBD
+Our tests are in two major categories: property and example. Property tests check for certain properties and attributes for different predicates, and example tests construct concrete examples of state transitions to make sure the program is working as intended.
 
-# Documentation
+Most of our edge case testing exist in the form of property tests, as example testing with limited state space and transition is not very interesting. 
 
-Embedded?
+Note that we will only be testing a small subset of our shape/piece predicates since they are essentially the same thing. 
+
+# Notes
+
+Special thanks to Gemini 3 Pro for debugging transition...
