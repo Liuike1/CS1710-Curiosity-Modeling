@@ -113,10 +113,17 @@ pred transition_clear[pre: State, post: State] {
           }
 
           (y2 >= clear_y) implies {
-            // moves down one plus any possible mino from new piece
-            ((x2 -> add[clear_y,1]) in piece_coords[x, y, pre.nextp]) implies {
-              post.board[x2,y2] = True
-            } else post.board[x2,y2] = pre.board[x2,add[clear_y,1]]
+            (y2 < 3) implies {
+              // moves down one plus any possible mino from new piece
+              ((x2 -> add[y2,1]) in piece_coords[x, y, pre.nextp]) implies {
+                post.board[x2,y2] = True
+              } else post.board[x2,y2] = pre.board[x2,add[y2,1]]
+            }
+            
+            (y2 = 3) implies {
+              // Top row must become False since there's no row above it to shift down
+              post.board[x2,y2] = False
+            }
           }
         }
       }
