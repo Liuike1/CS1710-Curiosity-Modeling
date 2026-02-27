@@ -62,4 +62,6 @@ Note that we will only be testing a small subset of our shape/piece predicates s
 
 # Notes
 
+The test labeled s9s14_Z_d is THE test that convined us this script worked. We didn't think that transition was actually possible on this specific state and piece, and we spent a solid minute trying to debug before realizing its a valid transition that the model generated. 
+
 Special thanks to Gemini 3 Pro for debugging transition...
