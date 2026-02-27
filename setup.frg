@@ -5,14 +5,12 @@ one sig True, False extends Boolean {}
 
 abstract sig Piece {}
 one sig O extends Piece {}
-abstract sig T, I, L, J, S, Z extends Piece {}
-
-one sig T_1, T_2, T_3, T_4 extends T {}
-one sig I_v, I_h extends I {}
-one sig L_1, L_2, L_3, L_4 extends L {}
-one sig J_1, J_2, J_3, J_4 extends J {}
-one sig S_d, S_u extends S {}
-one sig Z_d, Z_u extends Z {}
+one sig T_1, T_2, T_3, T_4 extends Piece {}
+one sig I_v, I_h extends Piece {}
+one sig L_1, L_2, L_3, L_4 extends Piece {}
+one sig J_1, J_2, J_3, J_4 extends Piece {}
+one sig S_d, S_u extends Piece {}
+one sig Z_d, Z_u extends Piece {}
 
 sig State {
   board: pfunc Int -> Int -> Boolean,
@@ -234,7 +232,7 @@ fun piece_coords[x: Int, y: Int, p: Piece]: set (Int -> Int) {
     p = T_1 => ({x -> y} + {add[x,1] -> y} + {add[x,2] -> y} + {add[x,1] -> add[y,1]}) else
     p = T_2 => ({x -> y} + {x -> add[y,1]} + {add[x,1] -> add[y,1]} + {x -> add[y,2]}) else
     p = T_3 => ({x -> y} + {x -> add[y,1]} + {add[x,1] -> add[y,1]} + {subtract[x,1] -> add[y,1]}) else
-    ({x -> y} + {x -> add[y,1]} + {subtract[x,1] -> add[y,1]} + {x -> add[y,2]}) 
+    /*p = T_4 =>*/ ({x -> y} + {x -> add[y,1]} + {subtract[x,1] -> add[y,1]} + {x -> add[y,2]})
 }
 
 // empty space for O
@@ -405,14 +403,6 @@ pred t4_hole[x, y: Int, s: State] {
   s.board[x,add[y,1]] = False
   s.board[subtract[x,1],add[y,1]] = False
   s.board[x,add[y,2]] = False
-}
-
-// checking if there is a full line
-pred line_clear[y: Int, s: State] {
-    s.board[0,y] = True
-    s.board[1,y] = True
-    s.board[2,y] = True
-    s.board[3,y] = True
 }
 
 test1: run {
