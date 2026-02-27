@@ -405,10 +405,39 @@ pred t4_hole[x, y: Int, s: State] {
   s.board[x,add[y,2]] = False
 }
 
-test1: run {
-    some s1, s2: State | {
-        s1 != s2
-        isShape14[s1]
-        isShape14Mirror[s2]
-    }
-} for exactly 2 State
+// checking that there is somewhere to put the next piece
+pred next_piece_hole[x, y: Int, s: State] {
+  s.nextp = O implies o_hole[x,y,s]
+
+  s.nextp = T_1 implies t1_hole[x,y,s]
+  s.nextp = T_2 implies t2_hole[x,y,s]
+  s.nextp = T_3 implies t3_hole[x,y,s]
+  s.nextp = T_4 implies t4_hole[x,y,s]
+
+  s.nextp = L_1 implies l1_hole[x,y,s]
+  s.nextp = L_2 implies l2_hole[x,y,s]
+  s.nextp = L_3 implies l3_hole[x,y,s]
+  s.nextp = L_4 implies l4_hole[x,y,s]
+
+  s.nextp = J_1 implies j1_hole[x,y,s]
+  s.nextp = J_2 implies j2_hole[x,y,s]
+  s.nextp = J_3 implies j3_hole[x,y,s]
+  s.nextp = J_4 implies j4_hole[x,y,s]
+
+  s.nextp = I_v implies i_vert_hole[x,s]
+  s.nextp = I_h implies i_horz_hole[y,s]
+
+  s.nextp = S_d implies s_down_hole[x,y,s]
+  s.nextp = S_u implies s_up_hole[x,y,s]
+
+  s.nextp = Z_d implies z_down_hole[x,y,s]
+  s.nextp = Z_u implies z_up_hole[x,y,s]
+}
+
+// test1: run {
+//     some s1, s2: State | {
+//         s1 != s2
+//         isShape14[s1]
+//         isShape14Mirror[s2]
+//     }
+// } for exactly 2 State
